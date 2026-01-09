@@ -44,23 +44,42 @@
                         {{-- MODO EDICIÓN --}}
                         @if ($modoEdicion)
                             <div class="relative">
-                                <flux:input label="Serial" wire:model.live="serialBuscado"
-                                    placeholder="Buscar serial disponible..." />
+                                <flux:input
+                                    label="Serial"
+                                    wire:model.live.debounce.300ms="serialBuscado"
+                                    placeholder="Buscar serial disponible..."
+                                    autocomplete="off"
+                                />
 
                                 @if (strlen($serialBuscado) > 0)
-                                    <ul
-                                        class="absolute z-10 w-full bg-white border rounded shadow max-h-48 overflow-auto">
-                                        @foreach ($equiposDisponibles->filter(fn($e) => str_contains(strtolower($e->serial), strtolower($serialBuscado))) as $equipo)
-                                            <li class="px-3 py-2 cursor-pointer hover:bg-gray-100"
+                                    <div
+                                        class="absolute z-20 w-full bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-700 rounded-lg shadow max-h-48 overflow-auto mt-1"
+                                    >
+                                        @forelse (
+                                            $equiposDisponibles->filter(fn ($e) =>
+                                                str_contains(
+                                                    strtolower($e->serial),
+                                                    strtolower($serialBuscado)
+                                                )
+                                            ) as $equipo
+                                        )
+                                            <div
+                                                class="px-3 py-2 cursor-pointer hover:bg-zinc-100 dark:hover:bg-zinc-800"
                                                 wire:click="
-                                                        $set('equipo_id', {{ $equipo->id }});
-                                                        $set('serialBuscado', '{{ $equipo->serial }}');
-                                                        $set('modoEdicion', false);
-                                                    ">
-                                                {{ $equipo->serial }} — {{ $equipo->marca }}
-                                            </li>
-                                        @endforeach
-                                    </ul>
+                                                    $set('equipo_id', {{ $equipo->id }});
+                                                    $set('serialBuscado', '{{ $equipo->serial }}');
+                                                    $set('modoEdicion', false);
+                                                "
+                                            >
+                                                <div class="font-medium">{{ $equipo->serial }}</div>
+                                                <div class="text-xs text-zinc-500">{{ $equipo->marca }}</div>
+                                            </div>
+                                        @empty
+                                            <div class="px-3 py-2 text-sm text-zinc-500">
+                                                No hay coincidencias
+                                            </div>
+                                        @endforelse
+                                    </div>
                                 @endif
                             </div>
                         @endif
