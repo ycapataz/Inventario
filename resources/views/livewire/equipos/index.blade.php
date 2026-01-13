@@ -69,5 +69,9 @@
             </div>
         </div>
     </div>
-</div>
+    <div class="flex justify-end mb-4">
+        <div class="w-72 p-4">
+            <flux:button variant="primary">Agregar equipo</flux:button>
+        </div>
+    </div>
 </div>
