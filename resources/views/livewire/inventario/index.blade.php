@@ -1,7 +1,11 @@
 <div>
     <div class="flex justify-end mb-4">
         <div class="w-72">
-            <flux:input kbd="⌘K" icon="magnifying-glass" placeholder="Search..."/>
+            <flux:input
+                wire:model.live.debounce.300ms="buscador"
+                icon="magnifying-glass"
+                placeholder="Buscar por nombre, correo, DNI o serial..."
+            />
         </div>
     </div>
     <div class="rounded-xl border border-outline dark:border-outline-dark bg-surface dark:bg-surface-dark">

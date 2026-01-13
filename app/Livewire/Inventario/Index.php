@@ -11,6 +11,8 @@ class Index extends Component
 {
     use WithPagination;
 
+    public $buscador = '';
+
     public $usuario_id = null;
     public $usuarioSeleccionado = null;
     public $equiposDisponibles = []; // ✅ NECESARIO
@@ -20,6 +22,15 @@ class Index extends Component
     protected $listeners = [
     'desasignarEquipo',
     ];
+
+    //Actualiza la paginacion para mejorar la vista
+    public function updatedBuscador($property)
+    {
+        if ($property === 'buscador') {
+            $this->resetPage();
+        }
+        
+    }
 
 
     public function mount()
@@ -122,7 +133,18 @@ public function desasignarEquipo()
     public function render()
     {
         return view('livewire.inventario.index', [
-            'usuarios' => Usuarios::with('equipo')->paginate(15),
+            'usuarios' => Usuarios::with('equipo')
+                ->when($this->buscador, function ($query) {
+                    $query->where(function ($q) {
+                        $q->where('nombre', 'like', '%' . $this->buscador . '%')
+                        ->orWhere('correo', 'like', '%' . $this->buscador . '%')
+                        ->orWhere('dni', 'like', '%' . $this->buscador . '%')
+                        ->orWhereHas('equipo', function ($eq) {
+                            $eq->where('serial', 'like', '%' . $this->buscador . '%');
+                        });
+                    });
+                })
+                ->paginate(15),
         ]);
     }
 }
