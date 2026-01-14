@@ -1,5 +1,5 @@
 <div>
-    <flux:modal name="ver-usuario" class="md:w-[900px]">
+    <flux:modal name="ver-usuario" wire:ignore.self class="md:w-[900px]">
         @if ($usuarioSeleccionado)
             <div class="space-y-8">
 
@@ -68,7 +68,7 @@
                                                 wire:click="
                                                     $set('equipo_id', {{ $equipo->id }});
                                                     $set('serialBuscado', '{{ $equipo->serial }}');
-                                                    $set('modoEdicion', false);
+                                                    
                                                 "
                                             >
                                                 <div class="font-medium">{{ $equipo->serial }}</div>
@@ -117,46 +117,46 @@
         @endif
     </flux:modal>
     <script>
-document.addEventListener('DOMContentLoaded', () => {
+        document.addEventListener('confirm-desasignar', () => {
 
-    Livewire.on('confirm-desasignar', () => {
+            // cerrar modal Flux
+            Flux.modal('ver-usuario').close()
 
-        // 1. Cerrar el modal Flux
-        Flux.modal('ver-usuario').close()
+            setTimeout(() => {
+                Swal.fire({
+                    title: '¿Desasignar equipo?',
+                    text: 'El usuario quedará sin equipo asignado',
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonText: 'Sí, desasignar',
+                    cancelButtonText: 'Cancelar',
+                    allowOutsideClick: false
+                }).then((result) => {
 
-        // 2. Esperar a que el overlay desaparezca
-        setTimeout(() => {
-            Swal.fire({
-                title: '¿Desasignar equipo?',
-                text: 'El usuario quedará sin equipo asignado',
-                icon: 'warning',
-                showCancelButton: true,
-                confirmButtonText: 'Sí, desasignar',
-                cancelButtonText: 'Cancelar',
-                allowOutsideClick: false
-            }).then((result) => {
+                    if (result.isConfirmed) {
+                        Livewire.dispatch('desasignarEquipo')
+                    } else {
+                        Flux.modal('ver-usuario').open()
+                    }
 
-                if (result.isConfirmed) {
-                    Livewire.dispatch('desasignarEquipo')
-                } else {
-                    // 3. Si cancela → volver a abrir el modal
-                    Flux.modal('ver-usuario').open()
-                }
-
-            })
-        }, 200)
-    })
-
-    Livewire.on('alert', data => {
-        Swal.fire({
-            icon: data.type ?? 'success',
-            title: data.title,
-            text: data.message,
-            timer: 2000,
-            showConfirmButton: false
+                })
+            }, 200)
         })
-    })
 
-})
-</script>
+        document.addEventListener('close-modal', event => {
+            Flux.modal('ver-usuario').close()
+        })
+
+        document.addEventListener('alert', event => {
+            const data = event.detail
+
+            Swal.fire({
+                icon: data.type ?? 'success',
+                title: data.title ?? 'Correcto',
+                text: data.message ?? '',
+                timer: 2000,
+                showConfirmButton: false
+            })
+        })
+    </script>
 </div>

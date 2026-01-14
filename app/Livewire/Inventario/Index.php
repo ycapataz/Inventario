@@ -7,6 +7,7 @@ use App\Models\Equipos;
 use Livewire\Attributes\Url;
 use Livewire\Component;
 use Livewire\WithPagination;
+use Livewire\Attributes\Validate;
 
 class Index extends Component
 {
@@ -18,6 +19,10 @@ class Index extends Component
     public $equiposDisponibles = []; // ✅ NECESARIO
     public $equipo_id = null;        // ✅ equipo seleccionado
     public $modoEdicion = false;
+    #[Validate(
+        'required|min:3',
+        message: 'Debes ingresar un serial válido'
+    )]
     public $serialBuscado = '';
     protected $listeners = [
     'desasignarEquipo',
@@ -64,46 +69,52 @@ class Index extends Component
     }
 
     public function accionEditarGuardar()
-{
-    // PRIMER CLICK → habilita edición
-    if (!$this->modoEdicion) {
-        $this->modoEdicion = true;
-        return;
-    }
-
-    // SEGUNDO CLICK → guarda cambios
-    if ($this->modoEdicion) {
-
-        if (!$this->equipo_id || !$this->usuarioSeleccionado) {
+    {
+        // PRIMER CLICK → habilita edición
+        if (!$this->modoEdicion) {
+            $this->modoEdicion = true;
             return;
         }
 
-        // Liberar equipo anterior
-        if ($this->usuarioSeleccionado->equipo_id) {
-            Equipos::where('id', $this->usuarioSeleccionado->equipo_id)
-                ->update(['estado_id' => 1]); // Disponible
+        // SEGUNDO CLICK → guardar
+        if ($this->modoEdicion) {
+
+            $this->validate();
+
+            if (!$this->equipo_id || !$this->usuarioSeleccionado) {
+                return;
+            }
+
+            // Liberar equipo anterior
+            if ($this->usuarioSeleccionado->equipo_id) {
+                Equipos::where('id', $this->usuarioSeleccionado->equipo_id)
+                    ->update(['estado_id' => 1]);
+            }
+
+            // Asignar nuevo equipo
+            $this->usuarioSeleccionado->update([
+                'equipo_id' => $this->equipo_id,
+            ]);
+
+            // Marcar nuevo equipo como ocupado
+            Equipos::where('id', $this->equipo_id)
+                ->update(['estado_id' => 2]);
+
+            $this->usuarioSeleccionado->refresh();
+
+            $this->modoEdicion = false;
+            $this->serialBuscado = '';
+            $this->equipo_id = null;
+
+            $this->dispatch('close-modal', 'ver-usuario');
+
+            $this->dispatch('alert', [
+                'type' => 'success',
+                'title' => '¡Éxito!',
+                'message' => 'Equipo actualizado correctamente'
+            ]);
         }
-
-        // Asignar nuevo equipo
-        $this->usuarioSeleccionado->update([
-            'equipo_id' => $this->equipo_id,
-        ]);
-
-        // Marcar nuevo equipo como ocupado
-        Equipos::where('id', $this->equipo_id)
-            ->update(['estado_id' => 2]); // Ocupado
-
-        // Refrescar datos
-        $this->usuarioSeleccionado->refresh();
-
-        // Reset UI
-        $this->modoEdicion = false;
-        $this->serialBuscado = '';
-        $this->equipo_id = null;
-
-        session()->flash('success', 'Equipo actualizado correctamente');
     }
-}
 
 
 public function desasignarEquipo()
@@ -126,7 +137,7 @@ public function desasignarEquipo()
     Usuarios::where('id', $this->usuario_id)
         ->update(['equipo_id' => null]);
 
-    $this->usuarioSeleccionado = $usuario->fresh();
+    $this->dispatch('close-modal', 'ver-usuario');
 
     $this->dispatch('alert', [
         'type' => 'success',
