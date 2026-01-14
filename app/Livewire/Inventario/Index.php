@@ -4,6 +4,7 @@ namespace App\Livewire\Inventario;
 
 use App\Models\Usuarios;
 use App\Models\Equipos;
+use Livewire\Attributes\Url;
 use Livewire\Component;
 use Livewire\WithPagination;
 
@@ -12,7 +13,6 @@ class Index extends Component
     use WithPagination;
 
     public $buscador = '';
-
     public $usuario_id = null;
     public $usuarioSeleccionado = null;
     public $equiposDisponibles = []; // ✅ NECESARIO
@@ -22,6 +22,32 @@ class Index extends Component
     protected $listeners = [
     'desasignarEquipo',
     ];
+
+    //Filtro de tablas.
+    #[Url(history:true)]
+    public $sortBy = 'created_at';
+    public $sortDirection = 'ASC';
+    protected array $sortable = [
+    'nombre'     => 'usuarios.nombre',
+    'correo'     => 'usuarios.correo',
+    'created_at' => 'usuarios.created_at',
+    'serial'     => 'equipos.serial',
+    'marca'      => 'equipos.marca',
+    'modelo'     => 'equipos.modelo',
+];
+
+
+    public function setSortBy(string $field)
+    {
+        if ($this->sortBy === $field) {
+            $this->sortDirection = $this->sortDirection === 'ASC' ? 'DESC' : 'ASC';
+        } else {
+            $this->sortBy = $field;
+            $this->sortDirection = 'ASC';
+        }
+
+        $this->resetPage();
+    }
 
     //Actualiza la paginacion para mejorar la vista
     public function updatedBuscador($property)
@@ -132,19 +158,21 @@ public function desasignarEquipo()
 
     public function render()
     {
+        $query = Usuarios::query()
+            ->leftJoin('equipos', 'equipos.id', '=', 'usuarios.equipo_id')
+            ->select('usuarios.*')
+            ->with('equipo')
+            ->search($this->buscador);
+
+        if (isset($this->sortable[$this->sortBy])) {
+            $query->orderBy(
+                $this->sortable[$this->sortBy],
+                $this->sortDirection
+            );
+        }
+
         return view('livewire.inventario.index', [
-            'usuarios' => Usuarios::with('equipo')
-                ->when($this->buscador, function ($query) {
-                    $query->where(function ($q) {
-                        $q->where('nombre', 'like', '%' . $this->buscador . '%')
-                        ->orWhere('correo', 'like', '%' . $this->buscador . '%')
-                        ->orWhere('dni', 'like', '%' . $this->buscador . '%')
-                        ->orWhereHas('equipo', function ($eq) {
-                            $eq->where('serial', 'like', '%' . $this->buscador . '%');
-                        });
-                    });
-                })
-                ->paginate(15),
+            'usuarios' => $query->paginate(15),
         ]);
     }
 }

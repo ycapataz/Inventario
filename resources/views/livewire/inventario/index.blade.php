@@ -15,9 +15,30 @@
                     <tr>
                         <th scope="col" class="p-4">Usuario</th>
                         <th scope="col" class="p-4">ID</th>
-                        <th scope="col" class="p-4">Marca</th>
-                        <th scope="col" class="p-4">Modelo</th>
-                        <th scope="col" class="p-4">Serial</th>
+                        <th scope="col" class="p-4" wire:click= "setSortBy('marca')">
+                                <x-ui.sort-button
+                                field="marca"
+                                label="Marca"
+                                :$sortBy
+                                :$sortDirection
+                            />
+                        </th>
+                        <th scope="col" class="p-4" wire:click= "setSortBy('modelo')">
+                            <x-ui.sort-button
+                                field="modelo"
+                                label="Modelo"
+                                :$sortBy
+                                :$sortDirection
+                            />
+                        </th>
+                        <th scope="col" class="p-4" wire:click= "setSortBy('serial')">
+                            <x-ui.sort-button
+                                field="serial"
+                                label="Serial"
+                                :$sortBy
+                                :$sortDirection
+                            />
+                        </th>
                         <th scope="col" class="p-4">Action</th>
                     </tr>
                 </thead>
