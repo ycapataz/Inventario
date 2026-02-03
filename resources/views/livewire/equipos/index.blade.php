@@ -34,22 +34,17 @@
                                 <td class="p-4">{{ $equipo->sistema_operativo }}</td>
                                 <td class="px-4 py-2">
                                     @php
-                                        $estadoId = $equipo->estado_id;
+                                        $color = match ($equipo->estado_id) {
+                                            1 => 'emerald',
+                                            2 => 'amber',
+                                            3 => 'rose',
+                                            default => 'zinc',
+                                        };
                                     @endphp
-
-                                    <span class="px-3 py-1 rounded-full text-sm font-semibold text-white
-                                        @if($estadoId == 1)
-                                            bg-green-500
-                                        @elseif($estadoId == 2)
-                                            bg-yellow-500 
-                                        @elseif($estadoId == 3)
-                                            bg-red-500
-                                        @else
-                                            bg-gray-500
-                                        @endif
-                                    ">
-                                        {{ $equipo->estado?->nombre ?? 'Sin estado' }}
-                                    </span>
+                                    
+                                <flux:badge color="{{ $color }}">
+                                    {{ $equipo->estado?->nombre ?? 'Sin estado' }}
+                                </flux:badge>
                                 </td>
                                 <td class="p-4">
                                     <flux:modal.trigger name="ver-usuario">
