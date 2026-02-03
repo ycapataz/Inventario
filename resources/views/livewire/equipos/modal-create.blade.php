@@ -50,7 +50,7 @@
             </div>
 
             {{-- FOOTER --}}
-            <div class="flex justify-end gap-3 pt-4 border-t border-outline">
+            <div class="flex justify-end gap-4 pt-6">
             <flux:modal.close>
                 <flux:button variant="ghost">
                     Cancelar
