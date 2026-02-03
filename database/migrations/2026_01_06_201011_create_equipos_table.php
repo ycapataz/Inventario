@@ -12,15 +12,17 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('equipos', function (Blueprint $table) {
-           $table->id();
-            $table->string('marca');
-            $table->string('modelo');
-            $table->string('serial');
-            $table->string('almacenamiento');
-            $table->string('ram');
-            $table->string('sistema_operativo');
-            $table->timestamps();
-        });
+        $table->id();
+        $table->string('marca');
+        $table->string('modelo');
+        $table->string('serial')->unique();
+        $table->string('almacenamiento');
+        $table->string('ram');
+        $table->string('sistema_operativo');
+        $table->foreignId('estado_id')->constrained('estados');
+        $table->timestamps();
+});
+
     }
 
     /**

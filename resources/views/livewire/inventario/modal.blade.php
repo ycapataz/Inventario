@@ -96,8 +96,7 @@
 
                     <!-- Botón Desasignar equipo -->
                     <flux:button
-                        variant="outline"
-                        class="text-red-500 border-red-500 hover:bg-red-50"
+                        variant="primary" color="red"
                         wire:click="$dispatch('confirm-desasignar')"
                     >
                         Desasignar equipo
@@ -105,7 +104,7 @@
 
                     <!-- Botón Editar/Guardar -->
                     <flux:button
-                        class="bg-yellow-500 text-black"
+                        variant="primary" color="yellow"
                         wire:click="accionEditarGuardar"
                     >
                         {{ $modoEdicion ? 'Guardar' : 'Editar' }}

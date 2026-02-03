@@ -66,12 +66,19 @@
 
                     </tbody>
                 </table>
+            <div class="p-4">
+                {{ $equipos->links() }}
             </div>
         </div>
     </div>
     <div class="flex justify-end mb-4">
         <div class="w-72 p-4">
-            <flux:button variant="primary">Agregar equipo</flux:button>
+            <flux:modal.trigger name="crear-equipo">
+                <flux:button variant="primary" color="blue">
+                    Agregar equipo
+                </flux:button>
+            </flux:modal.trigger>
         </div>
     </div>
+    @livewire('equipos.modal-create')
 </div>

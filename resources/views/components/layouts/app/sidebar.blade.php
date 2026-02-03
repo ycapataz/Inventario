@@ -2,6 +2,8 @@
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}" class="dark">
     <head>
         @include('partials.head')
+        {{-- SweetAlert --}}
+        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     </head>
     <body class="min-h-screen bg-white dark:bg-zinc-800">
         <flux:sidebar sticky stashable class="border-e border-zinc-200 bg-zinc-50 dark:border-zinc-700 dark:bg-zinc-900">
@@ -130,20 +132,27 @@
 
         {{ $slot }}
 
-        <!-- SweetAlert2 -->
-        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+        {{-- Scripts --}}
+        @livewireScripts
+        @fluxScripts
 
+        {{-- Listener Livewire --}}
         <script>
-            window.addEventListener('swal', event => {
-                Swal.fire({
-                    icon: event.detail.icon ?? 'success',
-                    title: event.detail.title ?? '',
-                    text: event.detail.text ?? '',
-                    confirmButtonText: 'OK'
+            document.addEventListener('livewire:init', () => {
+                Livewire.on('swal', (data) => {
+
+                    //console.log('Evento swal recibido:', data);
+
+                    const alert = Array.isArray(data) ? data[0] : data;
+
+                    Swal.fire({
+                        icon: alert.icon,
+                        title: alert.title,
+                        text: alert.text,
+                        confirmButtonText: 'OK',
+                    });
                 });
             });
         </script>
-
-        @fluxScripts
     </body>
 </html>
