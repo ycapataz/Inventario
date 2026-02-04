@@ -60,7 +60,6 @@ class Index extends Component
         if ($property === 'buscador') {
             $this->resetPage();
         }
-        
     }
 
 
@@ -183,7 +182,7 @@ public function desasignarEquipo()
         }
 
         return view('livewire.inventario.index', [
-            'usuarios' => $query->paginate(15),
+            'usuarios' => $query->paginate(8),
         ]);
     }
 }

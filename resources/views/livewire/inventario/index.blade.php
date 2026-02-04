@@ -4,7 +4,7 @@
             <flux:input
                 wire:model.live.debounce.300ms="buscador"
                 icon="magnifying-glass"
-                placeholder="Buscar por nombre, correo, DNI o serial..."
+                placeholder="Buscar .."
             />
         </div>
     </div>
