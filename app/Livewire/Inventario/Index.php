@@ -107,10 +107,10 @@ class Index extends Component
 
             $this->dispatch('close-modal', 'ver-usuario');
 
-            $this->dispatch('alert', [
-                'type' => 'success',
+            $this->dispatch('swal', [
+                'icon' => 'success',
                 'title' => '¡Éxito!',
-                'message' => 'Equipo actualizado correctamente'
+                'text' => 'Equipo actualizado correctamente'
             ]);
         }
     }
