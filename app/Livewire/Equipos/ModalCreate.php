@@ -77,8 +77,8 @@ class ModalCreate extends Component
                 'title' => 'Equipo creado',
                 'text' => 'El equipo se registró correctamente',
             ]);
-
-            $this->dispatch('equipo-creado');
+            
+            $this->dispatch('refresh-equipos');
 
         } catch (\Illuminate\Validation\ValidationException $e) {
 

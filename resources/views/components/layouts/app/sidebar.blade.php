@@ -139,10 +139,9 @@
         {{-- Listener Livewire --}}
         <script>
             document.addEventListener('livewire:init', () => {
+
+                // 🔵 Alertas normales (ya lo tienes)
                 Livewire.on('swal', (data) => {
-
-                    //console.log('Evento swal recibido:', data);
-
                     const alert = Array.isArray(data) ? data[0] : data;
 
                     Swal.fire({
@@ -152,6 +151,26 @@
                         confirmButtonText: 'OK',
                     });
                 });
+
+                // 🟠 Alertas de CONFIRMACIÓN
+                Livewire.on('swal-confirm', (data) => {
+                    const alert = Array.isArray(data) ? data[0] : data;
+
+                    Swal.fire({
+                        title: alert.title ?? '¿Estás seguro?',
+                        text: alert.text ?? '',
+                        icon: alert.icon ?? 'warning',
+                        showCancelButton: true,
+                        confirmButtonText: alert.confirmButtonText ?? 'Confirmar',
+                        cancelButtonText: alert.cancelButtonText ?? 'Cancelar',
+                        reverseButtons: true,
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            Livewire.dispatch(alert.onConfirm ?? 'confirmar-actualizacion');
+                        }
+                    });
+                });
+
             });
         </script>
     </body>

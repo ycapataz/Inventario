@@ -41,16 +41,22 @@
                                             default => 'zinc',
                                         };
                                     @endphp
-                                    
+
                                 <flux:badge color="{{ $color }}">
                                     {{ $equipo->estado?->nombre ?? 'Sin estado' }}
                                 </flux:badge>
                                 </td>
                                 <td class="p-4">
-                                    <flux:modal.trigger name="ver-usuario">
-                                        <flux:button variant="ghost" size="sm"
-                                            wire:click="" icon="pencil-square" />
-                                    </flux:modal.trigger>
+                                    <flux:modal.trigger name="editar-equipo">
+                                    <flux:button
+                                        variant="ghost"
+                                        size="sm"
+                                        {{--wire:click="abrirModal({{ $equipo->id }})"--}}
+                                        wire:click="$dispatchTo('equipos.modal-edite','abrir-modal',{ id: {{ $equipo->id }} })"
+                                        icon="pencil-square"
+                                        
+                                    />
+                                </flux:modal.trigger>
                                 </td>
                             </tr>
                         @empty
@@ -75,5 +81,6 @@
             </flux:modal.trigger>
         </div>
     </div>
+    @livewire('equipos.modal-edite')
     @livewire('equipos.modal-create')
 </div>
