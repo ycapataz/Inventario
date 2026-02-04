@@ -1,9 +1,15 @@
 <div>
     <div>
-        <div class="flex justify-end mb-4">
+        <div class="flex items-center justify-between mb-4">
             <div class="w-72">
                 <flux:input kbd="⌘K" icon="magnifying-glass" placeholder="Search..." />
             </div>
+
+            <flux:modal.trigger name="crear-equipo">
+                <flux:button variant="primary" color="blue">
+                    Agregar equipo
+                </flux:button>
+            </flux:modal.trigger>
         </div>
         <div class="rounded-xl border border-outline dark:border-outline-dark bg-surface dark:bg-surface-dark">
             <div class="overflow-x-auto overflow-hidden rounded-xl">
@@ -70,15 +76,6 @@
             <div class="p-4">
                 {{ $equipos->links() }}
             </div>
-        </div>
-    </div>
-    <div class="flex justify-end mb-4">
-        <div class="w-72 p-4">
-            <flux:modal.trigger name="crear-equipo">
-                <flux:button variant="primary" color="blue">
-                    Agregar equipo
-                </flux:button>
-            </flux:modal.trigger>
         </div>
     </div>
     @livewire('equipos.modal-edite')
