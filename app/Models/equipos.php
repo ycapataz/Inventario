@@ -2,6 +2,8 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Attributes\Scope;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -30,6 +32,25 @@ class Equipos extends Model
     public function usuarios()
     {
         return $this->hasMany(Usuarios::class, 'equipo_id');
+    }
+
+
+    //Buscardor para equipos
+    #[Scope]
+    protected function scopeBuscarEquipos(Builder $query, $value){
+
+        if (blank($value)) {
+            return $query;
+        }
+
+        return $query->where(function ($q) use ($value) {
+            $q->where('serial', 'like', "%{$value}%")
+              ->orWhere('marca', 'like', "%{$value}%")
+              ->orWhere('modelo', 'like', "%{$value}%")
+              ->orWhereHas('estado', function ($e) use ($value) {
+                  $e->where('nombre', 'like', "%{$value}%");
+              });
+        });
     }
 
 }

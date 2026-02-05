@@ -2,7 +2,11 @@
     <div>
         <div class="flex items-center justify-between mb-4">
             <div class="w-72">
-                <flux:input kbd="⌘K" icon="magnifying-glass" placeholder="Search..." />
+                <flux:input 
+                    wire:model.live.debounce.300ms="buscarEquipos"
+                    icon="magnifying-glass"
+                    placeholder="Buscar..."
+                />
             </div>
 
             <flux:modal.trigger name="crear-equipo">
