@@ -30,13 +30,13 @@
                     />
 
                     <flux:input
-                        label="Almacenamiento"
+                        label="Almacenamiento (GB)"
                         wire:model.defer="almacenamiento"
                         :error="$errors->first('almacenamiento')"
                     />
 
                     <flux:input
-                        label="RAM"
+                        label="RAM (GB)"
                         wire:model.defer="ram"
                         :error="$errors->first('ram')"
                     />

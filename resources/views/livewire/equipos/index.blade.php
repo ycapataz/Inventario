@@ -55,7 +55,7 @@
                                 <td class="p-4">{{ $equipo->modelo }}</td>
                                 <td class="p-4">{{ $equipo->serial }}</td>
                                 <td class="p-4">{{ $equipo->almacenamiento }}</td>
-                                <td class="p-4">{{ $equipo->ram }}</td>
+                                <td class="p-4">{{ $equipo->ram  }}</td>
                                 <td class="p-4">{{ $equipo->sistema_operativo }}</td>
                                 <td class="px-4 py-2">
                                     @php

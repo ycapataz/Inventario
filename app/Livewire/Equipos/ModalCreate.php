@@ -38,8 +38,8 @@ class ModalCreate extends Component
         'marca' => 'required|string|max:100',
         'modelo' => 'required|string|max:100',
         'serial' => 'required|string|max:100|unique:equipos,serial',
-        'almacenamiento' => 'required|string|max:50',
-        'ram' => 'required|string|max:50',
+        'almacenamiento' => 'required|numeric|min:1',
+        'ram' => 'required|numeric|min:1',
         'sistema_operativo' => 'required|string|max:100',
     ];
 
@@ -48,14 +48,14 @@ class ModalCreate extends Component
     // =========================
     public function crearEquipo()
     {
+        $this->validate();
         try {
-            $this->validate();
-
+            
             Equipos::create([
                 'marca' => $this->marca,
                 'modelo' => $this->modelo,
                 'serial' => $this->serial,
-                'almacenamiento' => $this->almacenamiento,
+                'almacenamiento' => $this->almacenamiento ,
                 'ram' => $this->ram,
                 'sistema_operativo' => $this->sistema_operativo,
                 'estado_id' => 1,
@@ -82,6 +82,7 @@ class ModalCreate extends Component
 
         } catch (\Illuminate\Validation\ValidationException $e) {
 
+            Flux::modal('crear-equipo')->close();
             // ❌ Error de validación (Livewire ya marca los inputs)
             $this->dispatch('swal', [
                 'icon' => 'error',
@@ -93,6 +94,7 @@ class ModalCreate extends Component
 
         } catch (\Throwable $e) {
 
+            Flux::modal('crear-equipo')->close();
             // ❌ Error inesperado
             logger()->error($e);
 

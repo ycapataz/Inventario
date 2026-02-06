@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Attributes\Scope;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -11,6 +12,20 @@ class Equipos extends Model
 {
     /** @use HasFactory<\Database\Factories\EquiposFactory> */
     use HasFactory;
+
+    protected function ram(): Attribute
+    {
+        return Attribute::make(
+            set: fn ($value) => $value . ' GB'
+        );
+    }
+
+    protected function almacenamiento(): Attribute
+    {
+        return Attribute::make(
+            set: fn ($value) => $value . ' GB'
+        );
+    }
 
     protected $fillable = [
         'marca',
