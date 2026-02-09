@@ -33,7 +33,7 @@ Sistema de inventario desarrollado con **Laravel + Livewire** para la gestión d
 1. Clona el repositorio:
 
 ```bash
-git clone https://github.com/tu-usuario/tu-repositorio.git
+git clone https://github.com/ycapataz/Inventario.git
 ```
 
 2. Ingresa al proyecto:
