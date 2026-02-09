@@ -9,13 +9,14 @@ use Illuminate\Support\Facades\Route;
 use Laravel\Fortify\Features;
 use App\Livewire\Equipos\EquiposIndex;
 use App\Livewire\Usuarios\UsuariosIndex;
+use App\Livewire\Dashboard;
 
 
 Route::get('/', function () {
     return view('welcome');
 })->name('home');
 
-Route::view('dashboard', 'dashboard')
+Route::get('/dashboard', Dashboard::class)
     ->middleware(['auth', 'verified'])
     ->name('dashboard');
 
