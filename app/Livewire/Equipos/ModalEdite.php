@@ -67,9 +67,9 @@ class ModalEdite extends Component
                 'max:100',
                 Rule::unique('equipos', 'serial')->ignore($this->equipoId),
             ],
-            'almacenamiento' => 'required|string|max:50',
-            'ram' => 'required|string|max:50',
-            'sistema_operativo' => 'required|string|max:100',
+            'almacenamiento' => 'required|integer|min:120|max:4096',
+            'ram' => 'required|int|in:2,4,8,16,32,64,128',
+            'sistema_operativo' => 'int|string|max:100',
             'estado_id' => 'required|exists:estados,id',
         ];
     }

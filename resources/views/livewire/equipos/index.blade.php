@@ -30,6 +30,9 @@
                             <th scope="col" class="p-4" wire:click= "setSortBy('serial')">
                                 <x-ui.sort-button field="serial" label="Serial" :$sortBy :$sortDirection />
                             </th>
+                            <th scope="col" class="p-4" wire:click= "setSortBy('activo_fijo')">
+                                <x-ui.sort-button field="activo_fijo" label="Activo Fijo" :$sortBy :$sortDirection />
+                            </th>
                             <th scope="col" class="p-4" wire:click= "setSortBy('almacenamiento')">
                                 <x-ui.sort-button field="almacenamiento" label="Almacenamiento" :$sortBy
                                     :$sortDirection />
@@ -44,6 +47,9 @@
                             <th scope="col" class="p-4" wire:click= "setSortBy('estado_id')">
                                 <x-ui.sort-button field="estado_id" label="Estado" :$sortBy :$sortDirection />
                             </th>
+                            <th scope="col" class="p-4" wire:click= "setSortBy('ciudad_id')">
+                                <x-ui.sort-button field="ciudad_id" label="Ciudad" :$sortBy :$sortDirection />
+                            </th>
                             <th scope="col" class="p-4">Action</th>
                         </tr>
                     </thead>
@@ -54,6 +60,7 @@
                                 <td class="p-4">{{ $equipo->marca }}</td>
                                 <td class="p-4">{{ $equipo->modelo }}</td>
                                 <td class="p-4">{{ $equipo->serial }}</td>
+                                <td class="p-4">{{ $equipo->activo_fijo }}</td>
                                 <td class="p-4">{{ $equipo->almacenamiento }}</td>
                                 <td class="p-4">{{ $equipo->ram  }}</td>
                                 <td class="p-4">{{ $equipo->sistema_operativo }}</td>
@@ -71,6 +78,7 @@
                                         {{ $equipo->estado?->nombre ?? 'Sin estado' }}
                                     </flux:badge>
                                 </td>
+                                <td class="p-4">{{ $equipo->ciudad?->nombre }}</td>
                                 <td class="p-4">
                                     <flux:modal.trigger name="editar-equipo">
                                         <flux:button variant="ghost" size="sm" {{-- wire:click="abrirModal({{ $equipo->id }})" --}}

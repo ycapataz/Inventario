@@ -38,11 +38,13 @@ class EquiposIndex extends Component
         'marca' => 'equipos.marca',
         'modelo' => 'equipos.modelo',
         'serial' => 'equipos.serial',
+        'activo_fijo' => 'equipos.activo_fijo',
         'almacenamiento' => 'equipos.almacenamiento',
         'ram' => 'equipos.ram',
         'sistema_operativo' => 'equipos.sistema_operativo',
         'created_at' => 'equipos.created_at',
         'estado_id' => 'equipos.estado_id',
+        'ciudad_id' => 'equipos.ciudad_id',
     ];
 
     public function setSortBy(string $field)
@@ -67,7 +69,7 @@ class EquiposIndex extends Component
     public function render()
     {
         $query = Equipos::query()
-            ->with('estado')
+            ->with(['estado', 'ciudad'])
             ->buscarEquipos($this->buscarEquipos);
         //CONFIGURACIÓN DE FILTROS Y ORDENAMIENTO
         if (isset($this->sortTable[$this->sortBy])) {

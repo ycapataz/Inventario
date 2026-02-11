@@ -13,34 +13,43 @@ class Equipos extends Model
     /** @use HasFactory<\Database\Factories\EquiposFactory> */
     use HasFactory;
 
-    protected function ram(): Attribute
-    {
-        return Attribute::make(
-            set: fn ($value) => $value . ' GB'
-        );
-    }
-
     protected function almacenamiento(): Attribute
     {
         return Attribute::make(
-            set: fn ($value) => $value . ' GB'
+            get: fn ($value) => $value . ' GB'
         );
     }
+
+    protected function ram(): Attribute
+    {
+        return Attribute::make(
+            get: fn ($value) => $value . ' GB'
+        );
+    }
+
 
     protected $fillable = [
         'marca',
         'modelo',
         'serial',
+        'activo_fijo',
         'almacenamiento',
         'ram',
         'sistema_operativo',
         'estado_id',
+        'ciudad_id',
     ];
 
     // 🔗 Un equipo pertenece a un estado
     public function estado()
     {
         return $this->belongsTo(Estado::class, 'estado_id');
+    }
+
+    // 🔗 Un equipo pertenece a una ciudad
+    public function ciudad()
+    {
+        return $this->belongsTo(Ciudad::class, 'ciudad_id');
     }
 
     // 🔗 Un equipo puede estar asignado a varios usuarios
@@ -59,12 +68,15 @@ class Equipos extends Model
         }
 
         return $query->where(function ($q) use ($value) {
-            $q->where('serial', 'like', "%{$value}%")
-              ->orWhere('marca', 'like', "%{$value}%")
-              ->orWhere('modelo', 'like', "%{$value}%")
-              ->orWhereHas('estado', function ($e) use ($value) {
-                  $e->where('nombre', 'like', "%{$value}%");
-              });
+        $q->where('serial', 'like', "%{$value}%")
+          ->orWhere('marca', 'like', "%{$value}%")
+          ->orWhere('modelo', 'like', "%{$value}%")
+          ->orWhereHas('estado', function ($e) use ($value) {
+              $e->where('nombre', 'like', "%{$value}%");
+          })
+          ->orWhereHas('ciudad', function ($c) use ($value) {
+              $c->where('nombre', 'like', "%{$value}%");
+          });
         });
     }
 
