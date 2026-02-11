@@ -43,7 +43,7 @@
                     </tr>
                 </thead>
                 <tbody class="divide-y divide-outline dark:divide-outline-dark">
-                    @forelse ($usuarios as $usuario)
+                     @forelse ($usuarios as $usuario)
 
                         <tr>
                             <td class="p-4">
@@ -55,10 +55,16 @@
                                     </div>
                                 </div>
                             </td>
-                            <td class="p-4">{{ $usuario->equipo?->id ?? '—' }}</td>
-                            <td class="p-4">{{ $usuario->equipo?->marca ?? 'Sin equipo' }}</td>
-                            <td class="p-4">{{ $usuario->equipo?->modelo ?? 'Sin equipo' }}</td>
-                            <td class="p-4">{{ $usuario->equipo?->serial ?? 'Sin equipo' }}</td>
+                             @if ($usuario->equipo)
+                            <td class="p-4">{{ $usuario->equipo->id}}</td>
+                            <td class="p-4">{{ $usuario->equipo->marca}}</td>
+                            <td class="p-4">{{ $usuario->equipo->modelo}}</td>
+                            <td class="p-4">{{ $usuario->equipo->serial}}</td>
+                            @else
+                                <td class="p-4 text-center text-gray-500 italic" colspan="4">
+                                    Sin equipo asignado
+                                </td>
+                            @endif
                                 <td class="p-4">
                                     <flux:modal.trigger name="ver-usuario">
                                         <flux:button
